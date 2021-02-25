@@ -16,5 +16,5 @@ class NewsBaseSrc(ABC):
         pass
 
     @abstractmethod
-    def run(self, target_total):
+    def run(self, target_total, initial_run=1):
         pass

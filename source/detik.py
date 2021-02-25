@@ -52,9 +52,9 @@ class Detik(NewsBaseSrc):
 
         self.result_text_array.append(result_text)
 
-    def run(self, target_total):
+    def run(self, target_total, initial_run=1):
         # List All Urls
-        page = 1
+        page = initial_run
         while target_total >= len(self.urls_to_download):
             url = self.urls_to_visit + "/" + str(page)
             print(f'Crawling: {url}')
