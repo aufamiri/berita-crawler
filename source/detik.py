@@ -1,17 +1,13 @@
 from urllib.parse import urljoin
 import requests
 from bs4 import BeautifulSoup
+import datetime
+import re
 
-from newsBase import NewsBaseSrc
+from .newsBase import NewsBaseSrc
 
 
 class Detik(NewsBaseSrc):
-    def __init__(self, urls):
-        self.visited_urls = []
-        self.urls_to_download = []
-        self.urls_to_visit = urls
-        self.result_text_array = []
-
     def download_url(self, url):
         return requests.get(url).text
 
@@ -25,47 +21,79 @@ class Detik(NewsBaseSrc):
 
             for item in link.find_all("a"):
                 path = item.get('href')
+
+                # there is some /detiktv/ link without media__subtitle
+                if (re.search('/detiktv/', path)):
+                    continue
                 # print(path)
 
                 if path and path.startswith('/'):
                     path = urljoin(url, path)
                 yield path
 
-    def add_url_to_visit(self, url):
-        if url not in self.visited_urls and url not in self.urls_to_visit:
-            self.urls_to_download.append(url)
-
     def crawl(self, url):
         html = self.download_url(url)
-        for url in self.get_linked_urls(url, html):
-            self.add_url_to_visit(url)
+        return list(self.get_linked_urls(url, html))
 
     def get_content(self, url):
         html = self.download_url(url)
         soup = BeautifulSoup(html, 'html.parser')
         source = soup.find_all(class_="itp_bodycontent")
 
+        print(f'download URL : {url}')
+
         result_text = ""
 
         for text in source[0].find_all("p"):
+
+            # skpping on editorial notes and video promote
+            if (text.find("strong")):
+                continue
+
             result_text = result_text + text.get_text()
 
-        self.result_text_array.append(result_text)
+        # self.result_text_array.append(result_text)
+        return result_text
 
-    def run(self, target_total, initial_run=1):
-        # List All Urls
+    def run(self, site_url="https://news.detik.com/indeks", target_total=100, initial_run=1, start_date=datetime.datetime.now(), end_date=datetime.datetime.now()):
         page = initial_run
-        while target_total >= len(self.urls_to_download):
-            url = self.urls_to_visit + "/" + str(page)
+        date = start_date
+
+        prev_download = 0
+        urls_to_download = []
+        result_text_array = []
+
+        # List All Urls
+        while target_total >= len(urls_to_download):
+            print(len(urls_to_download))
+
+            url = site_url + "/" + \
+                str(page) + "?date=" + date.strftime("%m/%d/%Y")
             print(f'Crawling: {url}')
-            self.crawl(url)
+            added_data = self.crawl(url)
+
+            urls_to_download.extend(added_data)
             page += 1
 
+            # change day if no more news is found
+            if (len(added_data) == 0):
+                if(date >= end_date):
+                    break
+
+                date = date + datetime.timedelta(1)
+                page = 1
+
         # Download and Parse from URL
-        print(f'Found Total Link: {len(self.urls_to_download)}')
-        for link in self.urls_to_download:
-            self.get_content(link)
+        print(f'Found Total Link: {len(urls_to_download)}')
+        for link in urls_to_download:
+            result = self.get_content(link)
+            result_text_array.append(result)
+
+        return result_text_array
 
 
 if __name__ == '__main__':
-    Detik(urls="https://news.detik.com/indeks").run(100)
+    result = Detik().run("https://news.detik.com/indeks", 100,
+                         end_date=datetime.datetime(2021, 2, 27))
+
+    print(result)
