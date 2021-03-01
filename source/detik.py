@@ -8,11 +8,16 @@ from .newsBase import NewsBaseSrc
 
 
 class Detik(NewsBaseSrc):
-    def download_url(self, url):
-        return requests.get(url).text
+    def parse_url(self, url, date, page):
+        return url + "/" + \
+            str(page) + "?date=" + date.strftime("%m/%d/%Y")
 
-    def get_linked_urls(self, url, html):
-        soup = BeautifulSoup(html, 'html.parser')
+    def get_default_url(self):
+        return "https://news.detik.com/indeks"
+
+    def get_linked_urls(self, url):
+        html = self.download_url(url)
+        soup = self.make_soup(html)
         for link in soup.find_all(class_="media__title"):
 
             # Get only the completed news (no video, no "round-up")
@@ -23,29 +28,27 @@ class Detik(NewsBaseSrc):
                 path = item.get('href')
 
                 # there is some /detiktv/ link without media__subtitle
-                if (re.search('/detiktv/', path)):
+                if (re.search('/detiktv/|/intermeso/', path)):
                     continue
                 # print(path)
 
-                if path and path.startswith('/'):
-                    path = urljoin(url, path)
                 yield path
 
-    def crawl(self, url):
-        html = self.download_url(url)
-        return list(self.get_linked_urls(url, html))
-
     def get_content(self, url):
-        html = self.download_url(url)
-        soup = BeautifulSoup(html, 'html.parser')
-        source = soup.find_all(class_="itp_bodycontent")get_default_url print(f'download URL : {url}')
+        # show all of the article (no pagination)
+        html = self.download_url(url + "?single=1")
+        soup = self.make_soup(html)
+        source = soup.find_all(class_="itp_bodycontent")
 
         result_text = ""
 
         for text in source[0].find_all("p"):
-
             # skpping on editorial notes and video promote
             if (text.find("strong")):
+                continue
+
+            # skipping video promote
+            if(text.find("a", class_='embed')):
                 continue
 
             result_text = result_text + text.get_text()
@@ -54,47 +57,10 @@ class Detik(NewsBaseSrc):
         return result_text
 
 
-"""
-    def run(self, site_url="https://news.detik.com/indeks", target_total=100, initial_run=1, start_date=datetime.datetime.now(), end_date=datetime.datetime.now()):
-        page = initial_run
-        date = start_date
-
-        prev_download = 0
-        urls_to_download = []
-        result_text_array = []
-
-        # List All Urls
-        while target_total >= len(urls_to_download):
-            print(len(urls_to_download))
-
-            url = site_url + "/" + \
-                str(page) + "?date=" + date.strftime("%m/%d/%Y")
-            print(f'Crawling: {url}')
-            added_data = self.crawl(url)
-
-            urls_to_download.extend(added_data)
-            page += 1
-
-            # change day if no more news is found
-            if (len(added_data) == 0):
-                if(date >= end_date):
-                    break
-
-                date = date + datetime.timedelta(1)
-                page = 1
-
-        # Download and Parse from URL
-        print(f'Found Total Link: {len(urls_to_download)}')
-        for link in urls_to_download:
-            result = self.get_content(link)
-            result_text_array.append(result)
-
-        return result_text_array
-        """
-
-
 if __name__ == '__main__':
-    result = Detik().run("https://news.detik.com/indeks", 100,
-                         end_date=datetime.datetime(2021, 2, 27))
+    # result = Detik().get_content(
+    #     "https://news.detik.com/berita-jawa-tengah/d-5476200/usai-jajal-krl-jogja-solo-jokowi-makan-siang-di-klaten-ini-dia-menunya")
+
+    result = Detik().run(target_total=20)
 
     print(result)

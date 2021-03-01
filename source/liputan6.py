@@ -10,11 +10,13 @@ class Liputan6(NewsBaseSrc):
         return "https://www.liputan6.com/indeks"
     """
     <article ... data-type="Article">
-        ...
-        <h4>
-            <a href=...>
-        </h4>
-        ...
+        <header>
+            ...
+            <h4>
+                <a href=...>
+            </h4>
+            ...
+        </header>
     </article>
     """
 
