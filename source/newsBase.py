@@ -50,14 +50,14 @@ class NewsBaseSrc(ABC):
         # OR
         # {date} > {end_date}
         while target_total >= len(urls_to_download):
-            print(len(urls_to_download))
-
             url = self.parse_url(site_url, date, page)
             print(f'Crawling: {url}')
 
             added_data = list(self.get_linked_urls(url))
 
             urls_to_download.extend(added_data)
+
+            print(f'Found {len(urls_to_download)} link')
             page += 1
 
             # change day if no more news is found
@@ -68,6 +68,10 @@ class NewsBaseSrc(ABC):
 
                 date = date + datetime.timedelta(1)
                 page = 1
+
+        # limiting link total to target_total
+        if (target_total < len(urls_to_download)):
+            del urls_to_download[20: len(urls_to_download)]
 
         # Download and Parse from URL
         print(f'Found Total Link: {len(urls_to_download)}')
