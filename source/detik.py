@@ -38,9 +38,7 @@ class Detik(NewsBaseSrc):
     def get_content(self, url):
         html = self.download_url(url)
         soup = BeautifulSoup(html, 'html.parser')
-        source = soup.find_all(class_="itp_bodycontent")
-
-        print(f'download URL : {url}')
+        source = soup.find_all(class_="itp_bodycontent")get_default_url print(f'download URL : {url}')
 
         result_text = ""
 
@@ -55,6 +53,8 @@ class Detik(NewsBaseSrc):
         # self.result_text_array.append(result_text)
         return result_text
 
+
+"""
     def run(self, site_url="https://news.detik.com/indeks", target_total=100, initial_run=1, start_date=datetime.datetime.now(), end_date=datetime.datetime.now()):
         page = initial_run
         date = start_date
@@ -90,6 +90,7 @@ class Detik(NewsBaseSrc):
             result_text_array.append(result)
 
         return result_text_array
+        """
 
 
 if __name__ == '__main__':
