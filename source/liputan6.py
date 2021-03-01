@@ -1,3 +1,5 @@
+import re
+
 from .newsBase import NewsBaseSrc
 
 
@@ -33,24 +35,37 @@ class Liputan6(NewsBaseSrc):
     def get_content(self, url):
         html = self.download_url(url)
         soup = self.make_soup(html)
-        source = soup.find_all(class_="itp_bodycontent")
-
-        print(f'download URL : {url}')
-
         result_text = ""
 
-        for text in source[0].find_all("p"):
+        for link in soup.find_all(class_="article-content-body__item-content"):
+            for text in link.find_all("p"):
 
-            # skpping on editorial notes and video promote
-            if (text.find("strong")):
-                continue
+                # Delete Preamble (i.e Liputan6.com, Jakarta -)
+                try:
+                    text.b.decompose()
+                except:
+                    pass
+                # print(text)
 
-            result_text = result_text + text.get_text()
+                # skpping on editorial notes and video promote
+                if (text.find("strong")):
+                    continue
 
+                try:
+                    if("baca-juga__header" in text["class"]):
+                        continue
+                except:
+                    pass
+
+                result_text = result_text + text.get_text()
+
+        # print(result_text)
         return result_text
 
 
 if __name__ == '__main__':
-    result = Liputan6().run()
+    result = Liputan6().run(target_total=20)
+    # result = Liputan6().get_content(
+    #     "https://www.liputan6.com/news/read/4495081/tim-pengkaji-uu-ite-minta-masukan-ade-armando-hingga-ahmad-dhani")
 
-    print(result)
+    # print(result)

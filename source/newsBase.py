@@ -72,7 +72,7 @@ class NewsBaseSrc(ABC):
         # Download and Parse from URL
         print(f'Found Total Link: {len(urls_to_download)}')
         for link in urls_to_download:
-            print(f'crawl {link}')
+            print(f'Downloading : {link}')
             result = self.get_content(link)
             result_text_array.append(result)
 

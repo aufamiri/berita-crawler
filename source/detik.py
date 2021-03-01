@@ -1,7 +1,3 @@
-from urllib.parse import urljoin
-import requests
-from bs4 import BeautifulSoup
-import datetime
 import re
 
 from .newsBase import NewsBaseSrc
