@@ -42,8 +42,6 @@ class Kompas(NewsBaseSrc):
 
             result_text = result_text + text.get_text()
 
-        print(result_text)
-        print()
         return result_text
 
 
