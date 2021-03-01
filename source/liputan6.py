@@ -1,7 +1,3 @@
-from urllib.parse import urljoin
-import requests
-import datetime
-
 from .newsBase import NewsBaseSrc
 
 
@@ -30,9 +26,6 @@ class Liputan6(NewsBaseSrc):
             for item in link.find_all("h4"):
 
                 path = item.find("a").get('href')
-
-                if path and path.startswith('/'):
-                    path = urljoin(url, path)
                 yield path
 
     def get_content(self, url):
@@ -56,6 +49,6 @@ class Liputan6(NewsBaseSrc):
 
 
 if __name__ == '__main__':
-    result = Liputan6().run(end_date=datetime.datetime(2021, 2, 27))
+    result = Liputan6().run()
 
     print(result)
