@@ -32,6 +32,15 @@ class Liputan6(NewsBaseSrc):
                 path = item.find("a").get('href')
                 yield path
 
+    """
+    <div class="... article-content-body__item-content">
+        <p>...</p>
+        <p>...</p>
+        <p class="baca-juga__header">...</p> #WE DON'T WANT THIS
+        <p>...</p>
+    </div>
+    """
+
     def get_content(self, url):
         html = self.download_url(url)
         soup = self.make_soup(html)
