@@ -71,7 +71,7 @@ class NewsBaseSrc(ABC):
 
         # limiting link total to target_total
         if (target_total < len(urls_to_download)):
-            del urls_to_download[20: len(urls_to_download)]
+            del urls_to_download[target_total: len(urls_to_download)]
 
         # Download and Parse from URL
         print(f'Found Total Link: {len(urls_to_download)}')
