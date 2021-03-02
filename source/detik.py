@@ -1,6 +1,7 @@
 import re
 
 from .newsBase import NewsBaseSrc
+from .newsResult import NewsResult
 
 
 class Detik(NewsBaseSrc):
@@ -34,11 +35,14 @@ class Detik(NewsBaseSrc):
         # show all of the article (no pagination)
         html = self.download_url(url + "?single=1")
         soup = self.make_soup(html)
-        source = soup.find_all(class_="itp_bodycontent")
+        title = soup.find(
+            "h1", attrs={'class': 'detail__title'}).get_text().strip()
+
+        source = soup.find(class_="detail__body-text")
 
         result_text = ""
 
-        for text in source[0].find_all("p"):
+        for text in source.find_all("p"):
             # skpping on editorial notes and video promote
             if (text.find("strong")):
                 continue
@@ -50,13 +54,13 @@ class Detik(NewsBaseSrc):
             result_text = result_text + text.get_text()
 
         # self.result_text_array.append(result_text)
-        return result_text
+        return NewsResult(url, title, result_text)
 
 
 if __name__ == '__main__':
-    # result = Detik().get_content(
-    #     "https://news.detik.com/berita-jawa-tengah/d-5476200/usai-jajal-krl-jogja-solo-jokowi-makan-siang-di-klaten-ini-dia-menunya")
+    result = Detik().get_content(
+        "https://news.detik.com/berita-jawa-tengah/d-5476200/usai-jajal-krl-jogja-solo-jokowi-makan-siang-di-klaten-ini-dia-menunya")
 
-    result = Detik().run(target_total=20)
+    # result = Detik().run(target_total=20)
 
     print(result)

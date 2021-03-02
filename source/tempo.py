@@ -1,7 +1,7 @@
 import re
 
 from .newsBase import NewsBaseSrc
-from .newsResult import newsResult
+from .newsResult import NewsResult
 
 
 class Tempo(NewsBaseSrc):
@@ -81,7 +81,7 @@ class Tempo(NewsBaseSrc):
         print(title)
         print()
 
-        return newsResult(url, title, result_text)
+        return NewsResult(url, title, result_text)
 
 
 if __name__ == '__main__':
