@@ -11,6 +11,4 @@ a simple and extensible Indonesian Index News Crawler
 
 ### Requirements :
 - BeautifulSoup4
-- re
-- datetime
-- abc
+- requests
