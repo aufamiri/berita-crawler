@@ -25,6 +25,7 @@ class Detik(NewsBaseSrc):
                 path = item.get('href')
 
                 # there is some /detiktv/ link without media__subtitle
+                # and the intermeso page is sooooo different, I'd rather skip it
                 if (re.search('/detiktv/|/intermeso/', path)):
                     continue
                 # print(path)
