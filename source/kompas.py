@@ -1,6 +1,7 @@
 import re
 
 from .newsBase import NewsBaseSrc
+from .newsResult import NewsResult
 
 
 class Kompas(NewsBaseSrc):
@@ -21,6 +22,10 @@ class Kompas(NewsBaseSrc):
             yield path
 
     """
+    --TITLE--
+    <h1 class="read__title>...</h1>
+    
+    --CONTENT--
     <div class="read__content">
         <p>...</p>
         <p>...</p>
@@ -33,6 +38,9 @@ class Kompas(NewsBaseSrc):
         soup = self.make_soup(html)
         result_text = ""
 
+        title = soup.find(
+            "h1", attrs={'class': 'read__title'}).get_text().strip()
+
         content = soup.find("div", class_="read__content")
         for text in content.find_all("p"):
 
@@ -42,11 +50,13 @@ class Kompas(NewsBaseSrc):
 
             result_text = result_text + text.get_text()
 
-        return result_text
+        return NewsResult(url, title, result_text)
 
 
 if __name__ == '__main__':
-    result = Kompas().run(target_total=20)
+    # result = Kompas().run(target_total=20)
+    result = Kompas().get_content(
+        "https://www.kompas.com/global/read/2021/02/28/235005770/cerita-najbullah-jual-ginjal-demi-uang-nikah-agar-keluarganya-tak-dibunuh")
     # result = Liputan6().get_content(
     #     "https://www.liputan6.com/news/read/4495081/tim-pengkaji-uu-ite-minta-masukan-ade-armando-hingga-ahmad-dhani")
 
