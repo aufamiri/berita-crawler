@@ -1,6 +1,7 @@
 import re
 
 from .newsBase import NewsBaseSrc
+from .newsResult import NewsResult
 
 
 class Liputan6(NewsBaseSrc):
@@ -46,6 +47,9 @@ class Liputan6(NewsBaseSrc):
         soup = self.make_soup(html)
         result_text = ""
 
+        title = soup.find(
+            "h1", attrs={'itemprop': 'headline'}).get_text().strip()
+
         for link in soup.find_all(class_="article-content-body__item-content"):
             for text in link.find_all("p"):
 
@@ -69,12 +73,12 @@ class Liputan6(NewsBaseSrc):
                 result_text = result_text + text.get_text()
 
         # print(result_text)
-        return result_text
+        return NewsResult(url, title, result_text)
 
 
 if __name__ == '__main__':
-    result = Liputan6().run(target_total=20)
-    # result = Liputan6().get_content(
-    #     "https://www.liputan6.com/news/read/4495081/tim-pengkaji-uu-ite-minta-masukan-ade-armando-hingga-ahmad-dhani")
+    # result = Liputan6().run(target_total=20)
+    result = Liputan6().get_content(
+        "https://www.liputan6.com/news/read/4495081/tim-pengkaji-uu-ite-minta-masukan-ade-armando-hingga-ahmad-dhani")
 
     # print(result)
