@@ -34,6 +34,10 @@ class Liputan6(NewsBaseSrc):
                 yield path
 
     """
+    --TITLE--
+    <h1 ... itemprop="headline">...</h1>
+    
+    --CONTENT--
     <div class="... article-content-body__item-content">
         <p>...</p>
         <p>...</p>
