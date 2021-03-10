@@ -57,7 +57,7 @@ class NewsBaseSrc(ABC):
 
             urls_to_download.extend(added_data)
 
-            print(f'Found {len(urls_to_download)} link')
+            print(f'Found New {len(added_data)} link')
             page += 1
 
             # change day if no more news is found
