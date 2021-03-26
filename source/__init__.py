@@ -7,7 +7,6 @@ from .turnbackhoax import TurnBackHoax
 from .newsBase import NewsBaseSrc
 from .newsResult import NewsResult
 
-from enum import Enum
 from datetime import datetime
 from typing import List
 

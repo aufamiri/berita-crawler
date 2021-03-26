@@ -11,7 +11,7 @@ def load_task():
 
     tasks = []
     output = data["output"]["type"]
-    file_name = data["output"]["name"]
+    file_name = data["output"].get("name")
 
     for item in data['tasks']:
         tasks.append(TaskModel(

@@ -34,9 +34,48 @@ a simple and extensible Indonesian Index News Crawler
 - Open / Create `main.json` files
 
     this files is used to determine what task the program will do
-    (see more info down below)
+    (see more [here](#json-files))
 
 - Run the program
 
     ```python -m main```
+
+## JSON Files
+this program use a simple json file to determine from which source it needs to take.
+
+a template under the name `main.json` is already available. You can use it as a base.
+
+### Task
+```
+    "tasks" : [
+        {
+            "src":"detik",
+            "target_length":5
+        }
+    ]
+```
+
+**available parameter**
+|    params     | required |                              options                              |                   description                    |            default             |
+| :-----------: | :------: | :---------------------------------------------------------------: | :----------------------------------------------: | :----------------------------: |
+|      src      | required | "detik", "liputan6", "cnnIndo", "kompas", "tempo", "turnbackhoax" |              the source of the news              |                                |
+| target_length | required |                                                                   |             how many news is crawled             |                                |
+|  start_date   | optional |                                                                   |  the start date of the news (format dd/mm/yyyy)  | system date (`datetime.now()`) |
+|   end_date    | optional |                                                                   | the maximum date of the news (format dd/mm/yyyy) | system date (`datetime.now()`) |
+
+### Output
+```
+    "output": {
+        "type": "csv",
+        "name": "result.csv"
+    }
+```
+
+**available parameter**
+| params | required | options |     description      |   default    |
+| :----: | :------: | :-----: | :------------------: | :----------: |
+|  type  | required |  "csv"  | the output file type |              |
+|  name  | optional |         | the output file name | "output.csv" |
+
+
 
