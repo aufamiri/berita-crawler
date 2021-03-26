@@ -1,0 +1,16 @@
+{
+    "tasks": [
+        {
+            "src": "detik",
+            "target_length": 5
+        },
+        {
+            "src": "turnbackhoax",
+            "target_length": 2
+        }
+    ],
+    "output": {
+        "type": "csv",
+        "name": "result.csv"
+    }
+}

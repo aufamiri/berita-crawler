@@ -35,16 +35,23 @@ class NewsBaseSrc(ABC):
     def download_url(self, url):
         return requests.get(url).text
 
-    def run(self, site_url=None, target_total=100, initial_run=1, start_date=datetime.datetime.now(), end_date=datetime.datetime.now()):
+    def run(self, site_url=None, target_total=100, initial_run=1, start_date=None, end_date=None):
+        # null check
+        if start_date is None:
+            start_date = datetime.datetime.now()
+
+        if end_date is None:
+            end_date = datetime.datetime.now()
+
+        if site_url is None:
+            site_url = self.get_default_url()
+
         page = initial_run
         date = start_date
 
         prev_download = 0
         urls_to_download = []
         result_text_array = []
-
-        if (site_url is None):
-            site_url = self.get_default_url()
 
         # Search for article url until target is fullfilled
         # OR

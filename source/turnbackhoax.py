@@ -96,7 +96,7 @@ class TurnBackHoax(NewsBaseSrc):
             if(isNarasi and not re.search("penjelasan", temp_text.lower())):
                 result_text = result_text + temp_text
 
-        return NewsResult(url, title, result_text)
+        return NewsResult(url, title, result_text, valid=False)
 
 
 if __name__ == '__main__':

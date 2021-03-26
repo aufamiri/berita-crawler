@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 class NewsBaseDest(ABC):
     # write the listNews array to destination file type
     @abstractmethod
-    def write(self, listNews, valid=True):
+    def write(self, listNews, valid=True, result_files="output.csv"):
         pass
 
     def validString(self, valid=True):
