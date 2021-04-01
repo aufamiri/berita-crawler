@@ -3,6 +3,7 @@ from taskModel import TaskModel
 import source
 import dest
 import json
+import datetime
 
 
 def load_task():
@@ -14,13 +15,27 @@ def load_task():
     file_name = data["output"].get("name")
 
     for item in data['tasks']:
+        start_date = item.get("start_date")
+        end_date = item.get("end_date")
+
+        if(start_date is not None):
+            start_date = parse_date(start_date)
+
+        if(end_date is not None):
+            end_date = parse_date(end_date)
+
         tasks.append(TaskModel(
             item["src"],
             item["target_length"],
-            item.get("start_date"),
-            item.get("end_date")))
+            start_date,
+            end_date
+        ))
 
     run(tasks, output, file_name)
+
+
+def parse_date(date):
+    return datetime.datetime.strptime(date, "%d/%m/%Y")
 
 
 def run(tasks, output, file_name):

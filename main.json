@@ -2,7 +2,8 @@
     "tasks": [
         {
             "src": "detik",
-            "target_length": 5
+            "target_length": 5,
+            "start_date": "29/3/2021"
         },
         {
             "src": "turnbackhoax",
