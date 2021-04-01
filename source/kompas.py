@@ -43,12 +43,19 @@ class Kompas(NewsBaseSrc):
 
         content = soup.find("div", class_="read__content")
         for text in content.find_all("p"):
-
-            # skpping on editorial notes and video promote
+            # skpping on editorial notes and promote
             if (text.find("strong")):
+                if(not re.search("^(.*?)KOMPAS(.*?)-", text.get_text())):
+                    continue
+
+            # remove infgrafis information....
+            if(text.find("span")):
                 continue
 
             result_text = result_text + text.get_text()
+
+        # remove XXXX,KOMPAS.com - at the start of article
+        result_text = re.sub("^(.*?)KOMPAS(.*?)-", "", result_text)
 
         return NewsResult(url, title, result_text)
 
@@ -56,7 +63,11 @@ class Kompas(NewsBaseSrc):
 if __name__ == '__main__':
     # result = Kompas().run(target_total=20)
     result = Kompas().get_content(
-        "https://www.kompas.com/global/read/2021/02/28/235005770/cerita-najbullah-jual-ginjal-demi-uang-nikah-agar-keluarganya-tak-dibunuh")
+        # "https://www.kompas.com/global/read/2021/02/28/235005770/cerita-najbullah-jual-ginjal-demi-uang-nikah-agar-keluarganya-tak-dibunuh")
+        # "https://nasional.kompas.com/read/2019/04/18/19403311/setelah-deklarasi-klaim-kemenangan-apa-agenda-prabowo")
+        # "https://megapolitan.kompas.com/read/2019/04/18/21052501/5500-personel-dikerahkan-amankan-ibadah-tri-hari-suci-di-jakarta")
+        "https://nasional.kompas.com/read/2019/04/18/20485951/perolehan-suara-turun-di-hitung-cepat-sementara-ini-respons-demokrat")
+    # "https://regional.kompas.com/read/2019/04/18/21094291/nu-jatim-imbau-warganya-tak-percaya-klaim-kemenangan-capres")
     # result = Liputan6().get_content(
     #     "https://www.liputan6.com/news/read/4495081/tim-pengkaji-uu-ite-minta-masukan-ade-armando-hingga-ahmad-dhani")
 
