@@ -19,11 +19,19 @@ a simple and extensible Indonesian Index News Crawler
 
 - on python > 3.x :
 
-    ```virtualenv venv```
+    ```virtualenv main```
 
-- activate the venv :
+  on python > 3.3 :
 
-    ```.venv/bin/activate```
+  ```python -m venv main```
+
+- activate the virutalenv :
+
+    ```source main/bin/activate```
+
+- deactivate the virtualenv:
+
+    ```deactivate```
 
 ---
 ### Using the Program
@@ -50,7 +58,8 @@ a template under the name `main.json` is already available. You can use it as a 
     "tasks" : [
         {
             "src":"detik",
-            "target_length":5
+            "target_length":5,
+            "start_date": "29/3/2021"
         }
     ]
 ```
