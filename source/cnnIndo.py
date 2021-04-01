@@ -1,4 +1,5 @@
 import re
+import os
 
 from .newsBase import NewsBaseSrc
 from .newsResult import NewsResult
@@ -40,9 +41,7 @@ class CnnIndo(NewsBaseSrc):
 
     --CONTENT--
     <div id="detikdetailtext">
-        <p>...</p>
-        <p>...</p>
-        <p>...</p>
+        ....
     </div>
     """
 
@@ -55,16 +54,25 @@ class CnnIndo(NewsBaseSrc):
             "h1", attrs={'class': 'title'}).get_text().strip()
 
         content = soup.find("div", attrs={'id': 'detikdetailtext'})
-        for text in content.find_all("p"):
 
-            result_text = result_text + text.get_text()
+        temp_result: String = content.get_text()
+
+        for text in temp_result.splitlines():
+            if(re.search("Gambas:", text)):
+                continue
+
+            if(text != ""):
+                text = re.sub("^(.*?)--", "", text)
+                result_text = result_text + text
+
+                # remove meaningless (xxxx/yyyy)
+                result_text = (re.sub("\(([^)]+)\)$", "", result_text))
 
         return NewsResult(url, title, result_text)
 
 
 if __name__ == '__main__':
-    result = CnnIndo().run(target_total=50)
-    # result = CnnIndo().get_content(
-    #     "https://www.kompas.com/global/read/2021/02/28/235005770/cerita-najbullah-jual-ginjal-demi-uang-nikah-agar-keluarganya-tak-dibunuh")
-
-    # print(result)
+    # result = CnnIndo().run(target_total=50)
+    result = CnnIndo().get_content(
+        # "https://www.cnnindonesia.com/nasional/20200530180616-20-508320/10-provinsi-di-indonesia-nihil-kasus-baru-corona-hari-ini")
+        "https://www.cnnindonesia.com/nasional/20200530191534-20-508359/polda-jateng-sekat-pemudik-arus-balik-hingga-7-juni")

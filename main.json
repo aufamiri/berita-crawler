@@ -2,12 +2,32 @@
     "tasks": [
         {
             "src": "detik",
-            "target_length": 5,
-            "start_date": "29/3/2021"
+            "target_length": 90,
+            "start_date": "6/8/2018"
+        },
+        {
+            "src": "liputan6",
+            "target_length": 55,
+            "start_date": "6/2/2019"
+        },
+        {
+            "src": "cnnIndo",
+            "target_length": 75,
+            "start_date": "30/5/2020"
+        },
+        {
+            "src": "kompas",
+            "target_length": 60,
+            "start_date": "18/4/2019"
+        },
+        {
+            "src": "tempo",
+            "target_length": 87,
+            "start_date": "22/1/2021"
         },
         {
             "src": "turnbackhoax",
-            "target_length": 2
+            "target_length": 100
         }
     ],
     "output": {
