@@ -43,20 +43,34 @@ class Detik(NewsBaseSrc):
 
         result_text = ""
 
-        temp_result = source.get_text()
-        for text in temp_result.splitlines():
-            if(text != ""):
-                text = re.sub("^(.*?)-", "", text)
-                text = re.sub("[Bb]aca juga(.*?)\.", "", text)
+        for text in source.find_all("p"):
 
-                result_text = result_text + text
+            # skpping on editorial notes and video promote
+            if (text.find("strong")):
+                continue
 
-                if(re.search("\(([^)]+)\)$", text)):
-                    break
+            # skipping video promote
+            if(text.find("a", class_='embed')):
+                continue
 
-        # # remove meaningless (xxxx/yyyy)
-        result_text = (re.sub("\(([^)]+)\)$", "", result_text))
+            result_text = result_text + text.get_text()
 
+        # second method if the content is still empty...
+        if(result_text == ""):
+            temp_result = source.get_text()
+            for text in temp_result.splitlines():
+                if(text != ""):
+                    text = re.sub("[Bb]aca juga(.*?)\.", "", text)
+
+                    result_text = result_text + text
+
+                    if(re.search("\(([^)]+)\)$", text)):
+                        break
+
+            # remove meaningless (xxxx/yyyy)
+            result_text = (re.sub("\(([^)]+)\)$", "", result_text))
+
+        print(result_text)
         return NewsResult(url, title.strip(), result_text.strip())
 
 

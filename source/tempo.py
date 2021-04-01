@@ -76,10 +76,11 @@ class Tempo(NewsBaseSrc):
                 if(text.find("div", {"class": "paging"})):
                     continue
 
+                # text = re.sub("^(.*?)-", "", text)
+                print(re.search("^(.*?)-", text.get_text()))
                 result_text = result_text + text.get_text()
 
-        print(title)
-        print()
+        print(result_text)
 
         return NewsResult(url, title, result_text)
 
@@ -89,6 +90,7 @@ if __name__ == '__main__':
 
     # result = Tempo().get_content("https://otomotif.tempo.co/read/1436739/pabrik-tesla-di-as-sempat-tutup-karena-kekurangan-onderdil-elon-musk-bicara")
     result = Tempo().get_content(
-        "https://nasional.tempo.co/read/1437826/setahun-pandemi-ini-15-pejabat-yang-pernah-positif-corona/full&view=ok")
+        # "https://nasional.tempo.co/read/1437826/setahun-pandemi-ini-15-pejabat-yang-pernah-positif-corona/full&view=ok")
+        "https://nasional.tempo.co/read/1425813/polisi-jamin-pam-swakarsa-sekarang-akan-berbeda-dengan-era-1998")
 
     # print(result)
