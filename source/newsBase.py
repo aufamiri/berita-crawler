@@ -85,6 +85,8 @@ class NewsBaseSrc(ABC):
         for link in urls_to_download:
             print(f'Downloading : {link}')
             result = self.get_content(link)
-            result_text_array.append(result)
+
+            if result is not None:
+                result_text_array.append(result)
 
         return result_text_array

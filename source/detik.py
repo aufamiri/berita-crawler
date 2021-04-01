@@ -70,7 +70,6 @@ class Detik(NewsBaseSrc):
             # remove meaningless (xxxx/yyyy)
             result_text = (re.sub("\(([^)]+)\)$", "", result_text))
 
-        print(result_text)
         return NewsResult(url, title.strip(), result_text.strip())
 
 

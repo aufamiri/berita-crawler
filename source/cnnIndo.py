@@ -55,20 +55,24 @@ class CnnIndo(NewsBaseSrc):
 
         content = soup.find("div", attrs={'id': 'detikdetailtext'})
 
-        temp_result: String = content.get_text()
+        try:
+            temp_result: String = content.get_text()
 
-        for text in temp_result.splitlines():
-            if(re.search("Gambas:", text)):
-                continue
+            for text in temp_result.splitlines():
+                if(re.search("Gambas:", text)):
+                    continue
 
-            if(text != ""):
-                text = re.sub("^(.*?)--", "", text)
-                result_text = result_text + text
+                if(text != ""):
+                    text = re.sub("^(.*?)--", "", text)
+                    result_text = result_text + text
 
-        # remove meaningless (xxxx/yyyy)
-        result_text = (re.sub("\(([^)]+)\)$", "", result_text))
+            # remove meaningless (xxxx/yyyy)
+            result_text = (re.sub("\(([^)]+)\)$", "", result_text))
 
-        return NewsResult(url, title, result_text)
+            return NewsResult(url, title, result_text)
+
+        except:
+            pass
 
 
 if __name__ == '__main__':
