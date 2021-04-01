@@ -65,8 +65,8 @@ class CnnIndo(NewsBaseSrc):
                 text = re.sub("^(.*?)--", "", text)
                 result_text = result_text + text
 
-                # remove meaningless (xxxx/yyyy)
-                result_text = (re.sub("\(([^)]+)\)$", "", result_text))
+        # remove meaningless (xxxx/yyyy)
+        result_text = (re.sub("\(([^)]+)\)$", "", result_text))
 
         return NewsResult(url, title, result_text)
 

@@ -43,26 +43,29 @@ class Detik(NewsBaseSrc):
 
         result_text = ""
 
-        for text in source.find_all("p"):
+        temp_result = source.get_text()
+        for text in temp_result.splitlines():
+            if(text != ""):
+                text = re.sub("^(.*?)-", "", text)
+                text = re.sub("[Bb]aca juga(.*?)\.", "", text)
 
-            # skpping on editorial notes and video promote
-            if (text.find("strong")):
-                continue
+                result_text = result_text + text
 
-            # skipping video promote
-            if(text.find("a", class_='embed')):
-                continue
+                if(re.search("\(([^)]+)\)$", text)):
+                    break
 
-            result_text = result_text + text.get_text()
+        # # remove meaningless (xxxx/yyyy)
+        result_text = (re.sub("\(([^)]+)\)$", "", result_text))
 
-        return NewsResult(url, title, result_text)
+        return NewsResult(url, title.strip(), result_text.strip())
 
 
 if __name__ == '__main__':
     result = Detik().get_content(
-        "https://news.detik.com/berita/d-4153225/koalisi-jokowi-akan-minta-masukan-ormas-keagamaan-termasuk-fpi")
-    # "https://news.detik.com/berita/d-4152912/gempa-56-sr-guncang-sumba-barat-tak-berpotensi-tsunami")
+        # "https://news.detik.com/berita/d-4153225/koalisi-jokowi-akan-minta-masukan-ormas-keagamaan-termasuk-fpi")
+        # "https://news.detik.com/berita/d-4152912/gempa-56-sr-guncang-sumba-barat-tak-berpotensi-tsunami")
+        "https://news.detik.com/foto-news/d-4152869/foto-gelap-selimuti-pengungsi-gempa-lombok-yang-butuh-bantuan")
 
     # result = Detik().run(target_total=20)
 
-    print(result.content)
+    # print(result.content)
